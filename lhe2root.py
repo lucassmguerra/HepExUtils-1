@@ -479,12 +479,8 @@ try:
           branches["q2V1"][0], branches["q2V2"][0], branches["costheta1"][0], branches["costheta2"][0], branches["Phi"][0], branches["costhetastar"][0], branches["Phi1"][0]= event.computeVBFAngles()
           branches["HJJpz"][0] = sum((particle.second for particle in itertools.chain(event.daughters, event.associated)), ROOT.TLorentzVector()).Pz()
 
-          pj1 = event.associated[0].second
-          pj2 = event.associated[1].second
-          if pj1.Pt() > pj2.Pt() :
-            branches["Dphijj"][0] = pj1.DeltaPhi(pj2)
-          else:
-            branches["Dphijj"][0] = pj2.DeltaPhi(pj1)
+          pjets = sorted((_.second for _ in event.associated), key = lambda x: x.Pz())
+          branches["Dphijj"][0] = pjets[0].DeltaPhi(pjets[1])
         elif args.vbf_withdecay:
           branches["q2V1"][0], branches["q2V2"][0], branches["costheta1"][0], branches["costheta2"][0], branches["Phi"][0], branches["costhetastar"][0], branches["Phi1"][0]= event.computeVBFAngles()
           branches["HJJpz"][0] = sum((particle.second for particle in itertools.chain(event.daughters, event.associated)), ROOT.TLorentzVector()).Pz()
